@@ -35,11 +35,13 @@ with open('bitmex-XBTUSD-1m.csv', newline='') as csvfile:
             #and insert open
             f_time = datetime.utcfromtimestamp(time[x]).strftime('%Y-%m-%d %H:%M:%S')
             f.write(f'{f_time},')
-
-            #If fix is true check when the candle high is lower
-            #than candle open and join them
+            
+            #If fix is true check when the candle high is lower than candle open
+            #and that the candle low is higher than candle open
             if p_open[x] > p_high[x] and fix == True:
                 p_high[x] = p_open[x]
+            if p_open[x] < p_low[x] and fix == True:
+                p_low[x] = p_open[x]
 
             f.write(f'{p_open[x]},')
 
@@ -55,11 +57,6 @@ with open('bitmex-XBTUSD-1m.csv', newline='') as csvfile:
                 if f_low > p_low[y]:
                     f_low = p_low[y]
                 f_volume = f_volume + volume[y]
-            
-            #If fix is true check when the candle low is higher
-            #than the candle close and join them
-            if p_close[x] < f_low and fix == True:
-                f_low = p_close[x]
 
             f.write(f'{f_high},{f_low},{p_close[x]},{f_volume}\n')
 
